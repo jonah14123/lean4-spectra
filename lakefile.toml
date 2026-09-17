@@ -1,4 +1,4 @@
-name = "spectra_of_graphs"
+name = "lean4-spectra"
 version = "0.1.0"
 keywords = ["math"]
 defaultTargets = ["SpectraOfGraphs"]
