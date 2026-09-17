@@ -17,11 +17,13 @@ abbrev E (G : SimpleGraph V) := G.edgeSet
 noncomputable def adjMatrix (G : SimpleGraph V) [DecidableRel G.Adj] : Matrix V V ℝ :=
   Matrix.of (fun x y => if G.Adj x y then 1 else 0)
 
+omit [Fintype V] [DecidableEq V] in
 theorem adjMatrix_symmetric (G : SimpleGraph V) [DecidableRel G.Adj] (i j : V) :
   adjMatrix G i j = adjMatrix G j i := by
   unfold adjMatrix
   simp [Matrix.of_apply, G.adj_comm]
 
+omit [DecidableEq V] in
 theorem adjMatrix_row_sum (G : SimpleGraph V) [DecidableRel G.Adj] (r : V) :
   ∑ c, (adjMatrix G) r c = G.degree r := by
   unfold adjMatrix

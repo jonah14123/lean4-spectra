@@ -13,7 +13,7 @@ theorem laplacian_quadForm (G : SimpleGraph V) [DecidableRel G.Adj] (x : V → �
     adjMatrix G v u * x v ^ 2 / 2 - adjMatrix G v u * x v * x u + adjMatrix G v u * x u ^ 2 / 2
     := by
       intro v u
-      ring
+      ring_nf
     simp_rw [expand]
     simp_rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
     simp_rw [div_eq_mul_inv, ← Finset.sum_mul]
@@ -42,7 +42,7 @@ theorem s_laplacian_quadForm (G : SimpleGraph V) [DecidableRel G.Adj] (x : V →
     adjMatrix G v u * x v ^ 2 / 2 + adjMatrix G v u * x v * x u + adjMatrix G v u * x u ^ 2 / 2
     := by
       intro v u
-      ring
+      ring_nf
     simp_rw [expand]
     simp_rw [Finset.sum_add_distrib]
     simp_rw [div_eq_mul_inv, ← Finset.sum_mul]
@@ -59,8 +59,8 @@ theorem s_laplacian_quadForm (G : SimpleGraph V) [DecidableRel G.Adj] (x : V →
     unfold degMatrix
     simp only [Matrix.of_apply]
     simp_rw [mul_ite, mul_zero, ite_mul, zero_mul]
-    simp [Finset.sum_ite_eq]
-    ring
+    simp only [Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte]
+    ring_nf
     simp_rw [mul_comm, <- mul_assoc, mul_comm]
 
 theorem laplacian_positive_semidefinite (G : SimpleGraph V) [DecidableRel G.Adj] :
@@ -70,7 +70,7 @@ theorem laplacian_positive_semidefinite (G : SimpleGraph V) [DecidableRel G.Adj]
       simp [lapMatrix_symmetric]
       rfl
     · intro x -- non-negative
-      simp [Finsupp.sum_fintype]
+      simp only [star_trivial, mul_zero, implies_true, Finsupp.sum_fintype, zero_mul, Finset.sum_const_zero]
       simp_rw [mul_assoc, ← Finset.mul_sum]
       change 0 ≤ x ⬝ᵥ (lapMatrix G).mulVec x
       rw [laplacian_quadForm]
@@ -90,7 +90,7 @@ theorem s_laplacian_positive_semidefinite (G : SimpleGraph V) [DecidableRel G.Ad
       simp [sLapMatrix_symmetric]
       rfl
     · intro x -- non-negative
-      simp [Finsupp.sum_fintype]
+      simp only [star_trivial, mul_zero, implies_true, Finsupp.sum_fintype, zero_mul, Finset.sum_const_zero]
       simp_rw [mul_assoc, ← Finset.mul_sum]
       change 0 ≤ x ⬝ᵥ (sLapMatrix G).mulVec x
       rw [s_laplacian_quadForm]
